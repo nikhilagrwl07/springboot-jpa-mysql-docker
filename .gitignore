@@ -1,0 +1,77 @@
+thub hosts a progect with .gitignore files at https://github.com/github/gitignore
+
+#Maven
+app/target/
+app/pom.xml.tag
+app/pom.xml.releaseBackup
+app/pom.xml.versionsBackup
+app/pom.xml.next
+release.properties
+
+#Java
+*.class
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+# Package Files #
+*.jar
+*.war
+*.ear
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# NetBeans specific #
+# https://github.com/github/gitignore/blob/master/Global/NetBeans.gitignore
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# Eclipse specific #
+# https://github.com/github/gitignore/blob/master/Global/Eclipse.gitignore
+*.pydevproject
+.metadata
+.gradle
+app/bin/
+app/tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+# External tool builders
+.externalToolBuilders/
+# Locally stored "Eclipse launch configurations"
+*.launch
+# CDT-specific
+.cproject
+# PDT-specific
+.buildpath
+# sbteclipse plugin
+.target
+# TeXlipse plugin
+.texlipse
+
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
+#https://github.com/github/gitignore/blob/master/Global/JetBrains.gitignore
+*.iml
+## Directory-based project format:
+app/.idea/
+## File-based project format:
+app/*.ipr
+app/*.iws
+## Plugin-specific files:
+# IntelliJ
+out/
+# mpeltonen/sbt-idea plugin
+app/.idea_modules/
+# JIRA plugin
+atlassian-ide-plugin.xml
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
