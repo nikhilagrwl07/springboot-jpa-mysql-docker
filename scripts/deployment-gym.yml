@@ -14,6 +14,8 @@ spec:
       containers:
       - name: gym
         env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: minikube
           - name: MYSQL_USER
             valueFrom:
               configMapKeyRef:

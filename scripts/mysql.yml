@@ -4,7 +4,7 @@ metadata:
   name: mysql-config
   namespace: default
 data:
-  mysql_user: root
+  mysql_user: root      #Hack - Changing this to something will break will not work MySQL container
   mysql_password: c1oudc0w
   mysql_root_password: c1oudc0w
 ---
