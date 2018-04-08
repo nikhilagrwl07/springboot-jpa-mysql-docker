@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gym
+  namespace: default
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: gym
+      labels:
+        app: gym
+    spec:
+      containers:
+      - name: gym
+        env:
+          - name: MYSQL_USER
+            valueFrom:
+              configMapKeyRef:
+                name: mysql-config
+                key: mysql_user
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: mysql-config
+                key: mysql_password
+          - name: MYSQL_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: hostname-config
+                key: mysql_host
+        image: nikhilagrwl07/springboot-jpa-mysql-docker:v4

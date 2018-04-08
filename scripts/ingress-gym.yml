@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gym-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  backend:
+    serviceName: default-http-backend
+    servicePort: 80
+  rules:
+  - host: gym.all
+    http:
+      paths:
+      - path: /gym
+        backend:
+          serviceName: gym-service
+          servicePort: 8080
+#      - path: /customer
+#        backend:
+#          serviceName: customer-service
+#          servicePort: 3333
