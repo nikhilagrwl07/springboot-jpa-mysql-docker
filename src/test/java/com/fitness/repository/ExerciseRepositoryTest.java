@@ -4,11 +4,7 @@ import com.fitness.interceptors.RequestInterceptor;
 import com.fitness.table.Exercise;
 import com.fitness.table.Goal;
 import com.fitness.beans.DocketBean;
-import com.fitness.interceptors.RequestInterceptor;
-import com.fitness.table.Exercise;
-import com.fitness.table.Goal;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,14 +14,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -53,7 +45,7 @@ public class ExerciseRepositoryTest {
     @Before
     public void setUp() {
         goal = new Goal();
-        goal.setGoalname("goalname 1");
+        goal.setGoalName("goalname 1");
         goal.setMinutes(60);
         goal.setCreatedBy("USER");
         goal.setLastModifiedBy("USER");

@@ -1,28 +1,33 @@
 package com.fitness.controller;
 
 import com.fitness.dto.CredentialDTO;
+import com.fitness.exceptions.UserNotFoundException;
+import com.fitness.request.CredentialRequest;
 import com.fitness.service.CredentialService;
-import com.fitness.table.Credential;
+import com.fitness.table.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
+@Slf4j
 @RestController
-@RequestMapping(path = "/api/v1",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE,
-        method = {RequestMethod.GET, RequestMethod.POST})
-
+@RequestMapping(path = "/api/v1")
 public class CredentialController {
 
     @Autowired
     private CredentialService credentialService;
 
-    @RequestMapping(value = "credentials", method = RequestMethod.POST)
-    public Credential create(@RequestBody CredentialDTO credentialDTO){
-        return credentialService.save(credentialDTO.getCredential(), credentialDTO.getUser());
+    @RequestMapping(path = "/add/credentials", method = RequestMethod.POST)
+    public User create(@Valid  @RequestBody CredentialRequest credentialRequest) throws UserNotFoundException {
+        return credentialService.save(credentialRequest);
     }
+
+    @RequestMapping(path = "/credential", method = RequestMethod.GET)
+    public CredentialDTO getCreditnalsByUserFirstName(@RequestParam("userName") String userName) throws UserNotFoundException {
+        log.info("test");
+        return credentialService.getCreditnalsByFirstName(userName);
+    }
+
 }

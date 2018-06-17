@@ -1,6 +1,6 @@
 package com.fitness.exceptions;
 
-public class InvalidAccountException extends Throwable{
+public class InvalidAccountException extends Exception{
 
     public InvalidAccountException(String message) {
         super(message);

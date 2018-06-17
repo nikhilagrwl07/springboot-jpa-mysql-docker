@@ -1,11 +1,8 @@
 package com.fitness.integration;
 
-import com.fitness.repository.CredentialRepository;
-import com.fitness.table.Credential;
 import com.fitness.FitnessApplication;
 import com.fitness.repository.CredentialRepository;
 import com.fitness.table.Credential;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

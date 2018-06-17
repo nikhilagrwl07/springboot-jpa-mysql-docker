@@ -1,16 +1,14 @@
 package com.fitness.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fitness.dto.CredentialDTO;
+import com.fitness.exceptions.UserNotFoundException;
 import com.fitness.interceptors.RequestInterceptor;
 import com.fitness.service.CredentialService;
 import com.fitness.table.Credential;
 import com.fitness.table.User;
 import com.fitness.beans.DocketBean;
-import com.fitness.interceptors.RequestInterceptor;
-import com.fitness.dto.CredentialDTO;
-import com.fitness.service.CredentialService;
-import com.fitness.table.Credential;
-import com.fitness.table.User;
+import com.fitness.request.CredentialRequest;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,24 +22,31 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 
-//@RunWith(SpringRunner.class)
-//@WebMvcTest(controllers = CredentialController.class,secure = false)
-//@ActiveProfiles("test")
+@RunWith(SpringRunner.class)
+@WebMvcTest(controllers = CredentialController.class,secure = false)
+@ActiveProfiles("test")
 public class CredentialControllerTest {
 
-    @MockBean
-    private CredentialService credentialService;
+    @Autowired
+    CredentialController credentialController;
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private CredentialService credentialService;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -52,28 +57,45 @@ public class CredentialControllerTest {
     @MockBean
     DocketBean docketBean;
 
-    @Test @Ignore
-    public void testSuccessful_createCredential() throws Exception {
-        User user  = new User();
-        user.setEmailAddress("nikhil.agrw07@gmail.com");
-        Credential credential = new Credential();
+    @Test
+    public void testSuccessful_createCredential() throws UserNotFoundException, Exception {
+
+        //Arrange
+        String firstName = "Menu";
+
+        CredentialDTO credential = new CredentialDTO();
+        credential.setFirstName(firstName);
+        credential.setLastName("Agrawal");
+        credential.setUserName("username1");
         credential.setPassword("pass123");
-        credential.setUsername("username1");
-        CredentialDTO credentialDTO = new CredentialDTO(credential,user);
+        String convertedJson = objectMapper.writeValueAsString(credential);
 
-        Mockito.when(credentialService.save(any(Credential.class), any(User.class))).thenReturn(credentialDTO.getCredential());
+        Mockito.when(credentialService.getCreditnalsByFirstName(firstName)).thenReturn(credential);
 
-
-        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/v1/credentials")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(credentialDTO))
-                .accept(MediaType.APPLICATION_JSON))
+        String url = "/api/v1/credential?userName="+firstName;
+        //Act
+        ResultActions resultActions = mockMvc.perform(get(url))
                 .andExpect(status().isOk());
+//                .contentType(MediaType.APPLICATION_JSON_UTF8)
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk());
 
-        Credential credential1 = objectMapper.readValue(resultActions.andReturn().getResponse().getContentAsString(), Credential.class);
-        assertEquals("", objectMapper.writeValueAsString(credentialDTO.getCredential()), objectMapper.writeValueAsString(credential1));
-        Mockito.verify(credentialService, times(1)).save(any(Credential.class), any(User.class));
+        CredentialDTO credential1 = objectMapper.readValue(resultActions.andReturn().getResponse().getContentAsString(), CredentialDTO.class);
+        assertEquals("", objectMapper.writeValueAsString(credential), objectMapper.writeValueAsString(credential1));
+//        Mockito.verify(credentialService, times(1)).save(any(Credential.class), any(User.class));
+
+
+
+
+
+//        ResultActions result = mockMvc.perform(get("/credentials").param("userName", firstName));
+//
+//        //Assert
+//        result.andExpect(status().isOk())
+//                .andExpect(content().json(convertedJson));
+
+
+        Mockito.verify(credentialService, times(1)).save(any(CredentialRequest.class));
 
     }
 

@@ -1,33 +1,16 @@
 package com.fitness.dto;
 
-import com.fitness.table.Credential;
-import com.fitness.table.User;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class CredentialDTO {
-    Credential credential;
-    User user;
+    private String firstName;
+    private String lastName;
+    private String userName;
+    private String password;
 
-    public CredentialDTO(Credential credential, User user) {
-        this.credential=credential;
-        this.user=user;
-    }
-
-    public Credential getCredential() {
-        return credential;
-    }
-
-    public void setCredential(Credential credential) {
-        this.credential = credential;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

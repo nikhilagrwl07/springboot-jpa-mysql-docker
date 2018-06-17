@@ -3,10 +3,7 @@ package com.fitness.service.impl;
 import com.fitness.exceptions.InvalidGoalException;
 import com.fitness.repository.ExerciseRepository;
 import com.fitness.repository.GoalRepository;
-import com.fitness.exceptions.InvalidGoalException;
-import com.fitness.dto.ExerciseDTO;
-import com.fitness.repository.GoalRepository;
-import com.fitness.repository.ExerciseRepository;
+import com.fitness.request.ExerciseRequest;
 import com.fitness.service.ExerciseService;
 import com.fitness.table.Exercise;
 import com.fitness.table.Goal;
@@ -35,23 +32,26 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public Exercise save(ExerciseDTO exerciseDTO) throws InvalidGoalException {
-        Goal goal = goalRepository.findByGoalname(exerciseDTO.getGoalName());
+    public Exercise save(ExerciseRequest exerciseRequest) throws InvalidGoalException {
+        Goal goal = goalRepository.findByGoalName(exerciseRequest.getGoalName());
         if(goal==null)
         {
             throw new InvalidGoalException("Goal does not exist");
         }
 
-        List<Exercise> exerciseList = exerciseRepository.findByGoalAndActivity(goal,exerciseDTO.getActivity());
+        // If some exercise is existing then add new exercise or else add first time
+        List<Exercise> exerciseList = goal.getExercises();
 
-        if(exerciseList!=null && !exerciseList.isEmpty())
-        {
-            throw new InvalidGoalException("Activity already existing with goal.");
-        }
         Exercise exercise = new Exercise();
-        exercise.setActivity(exerciseDTO.getActivity());
+        exercise.setActivity(exerciseRequest.getActivity());
         exercise.setGoal(goal);
-        exercise.setMinutes(exerciseDTO.getMinutes());
-        return exerciseRepository.saveAndFlush(exercise);
+        exercise.setMinutes(exerciseRequest.getMinutes());
+        exerciseList.add(exercise);
+
+//        goal.getExercises().add(exercise);
+
+        exerciseList.forEach(e -> exerciseRepository.save(e));
+        return exercise;
+
     }
 }

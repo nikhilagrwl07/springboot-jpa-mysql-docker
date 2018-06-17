@@ -33,8 +33,8 @@ public class TracingAspect {
         logger.info("{} returned with value {}", joinPoint, objectMapper.writeValueAsString(result));
     }
 
-    @AfterReturning(value = "execution(* com.fitness.repository.*.*(..))", returning = "result")
-    public void afterReturningRepository(JoinPoint joinPoint, Object result) throws JsonProcessingException {
-        logger.info("{} returned with value {}", joinPoint, objectMapper.writeValueAsString(result));
-    }
+//    @AfterReturning(value = "execution(* com.fitness.repository.*.*(..))", returning = "result")
+//    public void afterReturningRepository(JoinPoint joinPoint, Object result) throws JsonProcessingException {
+//        logger.info("{} returned with value {}", joinPoint, objectMapper.writeValueAsString(result));
+//    }
 }

@@ -9,5 +9,5 @@ import javax.transaction.Transactional;
 @Transactional
 @Repository
 public interface GoalRepository extends JpaRepository<Goal,Long>{
-    Goal findByGoalname(String goalName);
+    Goal findByGoalName(String goalName);
 }

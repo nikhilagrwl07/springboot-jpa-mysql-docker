@@ -1,30 +1,34 @@
 package com.fitness.exceptions;
 
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import com.fitness.common.ResponseEnum;
+@Setter
+@NoArgsConstructor
 public class ErrorResponse {
 
-    private ResponseEnum code;
+    private int errorCode;
     private String message;
 
-    public ErrorResponse(ResponseEnum code, String message) {
-        this.code = code;
+    public ErrorResponse(int errorCode, String message) {
+        this.errorCode = errorCode;
         this.message = message;
     }
 
-    public ResponseEnum getCode() {
-        return code;
+    public int getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(int errorCode) {
+        this.errorCode = errorCode;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getMessage() {
         return message;
     }
 
-    @Override
-    public String toString() {
-        return "ErrorResponse{" +
-                "code='" + code + '\'' +
-                ", message='" + message + '\'' +
-                '}';
-    }
 }

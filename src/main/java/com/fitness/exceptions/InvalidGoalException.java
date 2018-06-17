@@ -1,6 +1,6 @@
 package com.fitness.exceptions;
 
-public class InvalidGoalException extends Throwable {
+public class InvalidGoalException extends Exception {
 
     public InvalidGoalException(String message) {
         super(message);

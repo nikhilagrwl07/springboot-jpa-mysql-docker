@@ -1,7 +1,6 @@
 package com.fitness.service.impl;
 
 import com.fitness.repository.GoalRepository;
-import com.fitness.repository.GoalRepository;
 import com.fitness.service.GoalService;
 import com.fitness.table.Goal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,25 +21,6 @@ public class GoalServiceImpl implements GoalService {
 
     @Override
     public Goal save(Goal goal) {
-
-//         user.setGoal(goal);
-//         goal.setUser(user);
-
-//        User user = goal.getUser();
-//        UserProfile userProfile = goal.getUser().getUserProfile();
-
-//        userProfile.setUser(user);
-//        user.setUserProfile(userProfile);
-
-//        goal.setUser(user);
-
-
-//        for(int i=0;goal.getExercises()!=null && i<goal.getExercises().size();i++)
-//        {
-//            goal.getExercises().get(i).setGoal(goal);
-//        }
-//        goal.getUser().setGoal(goal);
-
-        return goalRepository.saveAndFlush(goal);
+        return goalRepository.save(goal);
     }
 }

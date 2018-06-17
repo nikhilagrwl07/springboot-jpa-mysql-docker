@@ -4,38 +4,22 @@ package com.fitness.table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Formula;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "USER")
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class User extends Auditable<String> implements Serializable {
+public class User implements Serializable {
 
     @Id
-    @GeneratedValue
-    @Column(name = "USER_ID")
-    private Long userId;
-
-    @OneToOne(mappedBy = "user") // for bidirectional
-    @JsonIgnore
-    private Credential credential;
-
-    @ManyToMany(mappedBy = "users",cascade = CascadeType.ALL) // for bidirectional
-    @JsonIgnore
-    private Set<Account> accounts = new HashSet<>();
-
-    @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="GOAL_ID") // name is for source object and referencedColumnName is for target object
-    public Goal goal;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Column(name = "FIRST_NAME")
     private String firstName;
@@ -43,32 +27,34 @@ public class User extends Auditable<String> implements Serializable {
     @Column(name = "LAST_NAME")
     private String lastName;
 
-    @Column(name = "BIRTH_DATE")
-    private Date birthDate;
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_profile_id")
+    @JsonIgnore
+    private UserProfile userProfile;
 
-    @Column(name = "EMAIL_ADDRESS")
-    private String emailAddress;
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(name = "USER_GOAL",
+    joinColumns = @JoinColumn(name = "USER_ID"),
+    inverseJoinColumns = @JoinColumn(name = "GOAL_ID"))
+    private List<Goal> goals = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_account_id")
+    @JsonIgnore
+    private UserAccountDetails userAccountDetails;
 
-//    @Formula("lower(datediff(curdate(), birth_date)/365)")
-//    private int age;
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name="credentials_id") // name is for source object and referencedColumnName is for target object
+    @JsonIgnore
+    private Credential credential;
 
-//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JoinColumn(name = "user_profile_id")
-//    private UserProfile userProfile;
-
-//    @OneToOne(fetch = FetchType.LAZY,
-//            cascade =  CascadeType.ALL,
-//            mappedBy = "user")
-//    private Goal goal;
-
-
-    public Long getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Credential getCredential() {
@@ -78,46 +64,6 @@ public class User extends Auditable<String> implements Serializable {
     public void setCredential(Credential credential) {
         this.credential = credential;
     }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-//    public int getAge() {
-//        return age;
-//    }
-//
-//    public void setAge(int age) {
-//        this.age = age;
-//    }
 
     public String getFirstName() {
         return firstName;
@@ -135,19 +81,31 @@ public class User extends Auditable<String> implements Serializable {
         this.lastName = lastName;
     }
 
-    public Goal getGoal() {
-        return goal;
+    public List<Goal> getGoals() {
+        return goals;
     }
 
-    public void setGoal(Goal goal) {
-        this.goal = goal;
+    public void addGoal(Goal goal) {
+        this.goals.add(goal);
     }
 
-    public Set<Account> getAccounts() {
-        return accounts;
+    public void removeGoal(Goal goal){
+        this.goals.remove(goal);
     }
 
-    public void setAccounts(Set<Account> accounts) {
-        this.accounts = accounts;
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
+    }
+
+    public UserAccountDetails getUserAccountDetails() {
+        return userAccountDetails;
+    }
+
+    public void setUserAccountDetails(UserAccountDetails userAccountDetails) {
+        this.userAccountDetails = userAccountDetails;
     }
 }

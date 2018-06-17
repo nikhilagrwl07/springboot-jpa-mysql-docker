@@ -1,11 +1,7 @@
 package com.fitness.integration;
 
-import com.fitness.controller.ExerciseController;
-import com.fitness.table.Exercise;
 import com.fitness.FitnessApplication;
-import com.fitness.controller.CredentialController;
 import com.fitness.controller.ExerciseController;
-import com.fitness.table.Credential;
 import com.fitness.table.Exercise;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -2,6 +2,7 @@ package com.fitness.table;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -10,15 +11,14 @@ import java.io.Serializable;
 @Entity
 @Table(name="CREDENTIAL")
 @NoArgsConstructor
+@AllArgsConstructor
 public class Credential extends Auditable<String> implements Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    @Column(name="CREDENTIAL_ID")
-    public Long credentialId;
+    public Long id;
 
-    @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="USER_ID") // name is for source object and referencedColumnName is for target object
+    @OneToOne(mappedBy = "credential",fetch = FetchType.LAZY) // for bidirectional
     @JsonIgnore
     public User user;
 
@@ -28,6 +28,11 @@ public class Credential extends Auditable<String> implements Serializable {
     @Column(name="PASSWORD")
     private String password;
 
+    public Credential(User user, String username, String password) {
+        this.user = user;
+        this.username = username;
+        this.password = password;
+    }
 
     public User getUser() {
         return user;
@@ -37,12 +42,12 @@ public class Credential extends Auditable<String> implements Serializable {
         this.user = user;
     }
 
-    public Long getCredentialId() {
-        return credentialId;
+    public Long getId() {
+        return id;
     }
 
-    public void setCredentialId(Long credentialId) {
-        this.credentialId = credentialId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {

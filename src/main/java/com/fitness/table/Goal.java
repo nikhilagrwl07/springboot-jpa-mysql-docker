@@ -5,14 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -20,11 +17,11 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Goal extends Auditable<String> implements Serializable {
 
     @Id
-    @GeneratedValue
-    @Column(name="GOAL_ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Range(min = 1, max = 120)
@@ -32,13 +29,15 @@ public class Goal extends Auditable<String> implements Serializable {
     private int minutes;
 
     @Column(name="GOAL_NAME")
-    private String goalname;
+    private String goalName;
 
-    @OneToMany(mappedBy = "goal",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "goal",fetch = FetchType.LAZY)        //by Default fetch type is lazy
+    @JsonIgnore
     private List<Exercise> exercises = new ArrayList<>();
 
-//    @OneToOne(mappedBy = "goal") // for bidirectional can remove it
-//    private User user;
+    @ManyToMany(mappedBy = "goals")
+    @JsonIgnore
+    public List<User> users = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -60,18 +59,31 @@ public class Goal extends Auditable<String> implements Serializable {
         return exercises;
     }
 
-    public void setExercises(List<Exercise> exercises) {
-        this.exercises = exercises;
+
+    //Overriding setter of list of exercises to avoid anyone setting all exercises. (Better database design practice)
+    public void addExercise(Exercise exercise) {
+        this.exercises.add(exercise);
     }
 
-    public String getGoalname() {
-        return goalname;
+    public void removeExercise(Exercise exercise) {
+        this.exercises.remove(exercise);
     }
 
-    public void setGoalname(String goalname) {
-        this.goalname = goalname;
+    public String getGoalName() {
+        return goalName;
+    }
+
+    public void setGoalName(String goalName) {
+        this.goalName = goalName;
     }
 
 
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void addUsers(User user) {
+        this.users.add(user);
+    }
 }
 
