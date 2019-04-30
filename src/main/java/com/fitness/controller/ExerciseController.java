@@ -22,26 +22,30 @@ import static com.fitness.common.ResponseEnum.GOAL_NOT_FOUND;
 @RequestMapping(path = "/api/v1")
 public class ExerciseController{
 
-    @Autowired
-    private ExerciseService exerciseService;
+    private final ExerciseService exerciseService;
 
     @Autowired
-    private CounterService counterService;
+    public ExerciseController(ExerciseService exerciseService) {
+        this.exerciseService = exerciseService;
+    }
 
-    @Autowired
-    private GaugeService gaugeService;
+//    @Autowired
+//    private CounterService counterService;
+//
+//    @Autowired
+//    private GaugeService gaugeService;
 
-    @RequestMapping(path = "/exercises", method = RequestMethod.GET)
+    @GetMapping(path = "/exercises/all")
     public List<Exercise> exercises(){
         long l = System.currentTimeMillis();
         List<Exercise> allExercise = exerciseService.getAllExercise();
         long timetaken = System.currentTimeMillis()-l;
-        this.gaugeService.submit("ExerciseController-timetaken", timetaken);
-        this.counterService.increment("ExerciseController-count");
+//        this.gaugeService.submit("ExerciseController-timetaken", timetaken);
+//        this.counterService.increment("ExerciseController-count");
         return allExercise;
     }
 
-    @RequestMapping(path = "/exercise", method = RequestMethod.GET)
+    @GetMapping(path = "/exercises")
     public ResponseEntity<Exercise> getExerciseByActivityAndName(@RequestParam(value = "activity") String activity,
                                                        @RequestParam(value = "minutes") int minutes){
         Exercise exerciseByActivityAndMinutes = exerciseService.getExerciseByActivityAndMinutes(activity, minutes);
@@ -53,7 +57,7 @@ public class ExerciseController{
         }
     }
 
-    @RequestMapping(path = "/add/exercise", method = RequestMethod.POST)
+    @PostMapping(path = "/exercises")
     public ResponseEntity<Exercise> addExercise(@Valid @RequestBody ExerciseRequest exerciseRequest) throws InvalidGoalException {
         try {
             Exercise exercise = exerciseService.save(exerciseRequest);

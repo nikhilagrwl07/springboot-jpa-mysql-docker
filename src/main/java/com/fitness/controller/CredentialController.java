@@ -7,27 +7,43 @@ import com.fitness.service.CredentialService;
 import com.fitness.table.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @Slf4j
 @RestController
 @RequestMapping(path = "/api/v1")
 public class CredentialController {
 
-    @Autowired
-    private CredentialService credentialService;
+    private final CredentialService credentialService;
 
-    @RequestMapping(path = "/add/credentials", method = RequestMethod.POST)
-    public User create(@Valid  @RequestBody CredentialRequest credentialRequest) throws UserNotFoundException {
-        return credentialService.save(credentialRequest);
+    @Autowired
+    public CredentialController(CredentialService credentialService) {
+        this.credentialService = credentialService;
     }
 
-    @RequestMapping(path = "/credential", method = RequestMethod.GET)
-    public CredentialDTO getCreditnalsByUserFirstName(@RequestParam("userName") String userName) throws UserNotFoundException {
-        log.info("test");
-        return credentialService.getCreditnalsByFirstName(userName);
+    @PostMapping(path = "/credentials")
+    public ResponseEntity<Object> create(@Valid  @RequestBody CredentialRequest credentialRequest) throws UserNotFoundException {
+        User savedUser = credentialService.save(credentialRequest);
+
+        URI savedUserUri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedUser.getId())
+                .toUri();
+
+        return ResponseEntity.created(savedUserUri).build(); // response header will have something like /credentials/1 to access value
+    }
+
+    @GetMapping(path = "/credentials")
+    public ResponseEntity<CredentialDTO> getCreditnalsByUserFirstName(@RequestParam("userName") String userName) throws UserNotFoundException {
+        CredentialDTO credentialsByFirstName = credentialService.getCreditnalsByFirstName(userName);
+
+        return ResponseEntity.ok(credentialsByFirstName);
     }
 
 }

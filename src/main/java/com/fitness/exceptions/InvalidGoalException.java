@@ -1,6 +1,10 @@
 package com.fitness.exceptions;
 
-public class InvalidGoalException extends Exception {
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class InvalidGoalException extends RuntimeException {
 
     public InvalidGoalException(String message) {
         super(message);

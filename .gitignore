@@ -25,3 +25,4 @@ nbdist/
 
 out
 target
+.DS_Store

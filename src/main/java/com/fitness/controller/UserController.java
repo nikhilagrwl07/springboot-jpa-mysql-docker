@@ -19,9 +19,9 @@ import javax.validation.Valid;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
-    @RequestMapping(path = "/userByFirstName", method = RequestMethod.GET)
+    @GetMapping(path = "/usersByFirstName")
     public ResponseEntity<User> getUserByFirstName(@RequestParam(value = "firstName") String firstName) throws UserNotFoundException
     {
         User user = userService.findUserByFirstName(firstName);
@@ -29,13 +29,13 @@ public class UserController {
     }
 
 
-    @RequestMapping(path = "/userByPhoneNumber", method = RequestMethod.GET)
+    @GetMapping(path = "/usersByPhoneNumber")
     public ResponseEntity<User> getUserByPhoneNumber(@RequestParam(value = "phoneNumber") String phoneNumber) throws InvalidGoalException {
         User userByPhoneNumber = userService.findUserByPhoneNumber(phoneNumber);
         return new ResponseEntity<>(userByPhoneNumber, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/add/user", method = RequestMethod.POST)
+    @PostMapping(path = "/users")
     public ResponseEntity<User> addUser(@Valid @RequestBody UserRequest user) throws InvalidGoalException {
         User userSaved = userService.save(user);
         return new ResponseEntity<>(userSaved, HttpStatus.OK);

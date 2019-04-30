@@ -19,14 +19,14 @@ public class GoalController {
     private GoalService goalService;
 
     //    @TrackTime
-    @RequestMapping(path = "/goals", method = RequestMethod.GET)
+    @GetMapping(path = "/goals")
     public List<Goal> list(){
         return goalService.getAllGoals();
     }
 
 
 //    @TrackTime
-    @RequestMapping(path = "/add/goal", method = RequestMethod.POST)
+    @PostMapping(path = "/goals")
     public Goal create(@RequestBody Goal goal) throws JsonProcessingException {
         Goal goalSaved = goalService.save(goal);
         log.info(" Saved - {} ",new ObjectMapper().writeValueAsString(goalSaved));
